@@ -1,8 +1,12 @@
 //jshint esversion:6
+/////// on the top dotenv////////
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+var encrypt = require('mongoose-encryption');
+
 
 const app = express();
 
@@ -12,15 +16,18 @@ app.use(bodyParser.urlencoded({
     extended:true
 }));
 
- mongoose.connect('mongodb+srv://Logio:u1LK6WLeFqi9o8Z6@cluster0.a75fhwm.mongodb.net/userDB?retryWrites=true&w=majority');
+ mongoose.connect('mongodb+srv://Logio:'+process.env.PSW+'@cluster0.a75fhwm.mongodb.net/userDB?retryWrites=true&w=majority');
 
- const userSchema = {
+ const userSchema = new mongoose.Schema({
     email:String,
     password: String
- };
+ });
+
+
+ /////// plugin(encrpt,{}) should be position before the Model//////////
+ userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ['password']});
 
  const User = new mongoose.model('User', userSchema);
-
 
 
 app.get('/', function(req,res){
