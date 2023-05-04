@@ -75,6 +75,7 @@ passport.use(new GoogleStrategy({ // Configurazione della strategia di autentica
   }
 ));
 
+
 app.get('/', function(req,res){
     res.render('home')
 })
@@ -145,6 +146,8 @@ app.post('/register', function(req,res){
         })
     });
 app.listen(3000)
+
+
 
 
 
